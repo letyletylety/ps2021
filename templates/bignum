@@ -1,0 +1,15 @@
+	var sum, more, a, b big.Int
+	Fscan(in, &sum)
+	Fscan(in, &more)
+
+	sum.Add(&sum, &more)
+
+	a.Div(&sum, big.NewInt(2))
+	b.Sub(&a, &more)
+
+	// sum + more = a + a
+	// sum - more = b + b
+
+	Fprintln(out, a.String())
+	Fprintln(out, b.String())
+

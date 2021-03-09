@@ -1,0 +1,9 @@
+type pair struct {
+	x int
+	y float64
+}
+
+type pairs []pair                  /**/
+func (a pairs) Len() int           { return len(a) }
+func (a pairs) Less(i, j int) bool { return a[i].x < a[j].x || a[i].y < a[j].y }
+func (a pairs) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
