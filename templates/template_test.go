@@ -1,34 +1,48 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+// single test case
+type ATestCase struct {
+	Input, Output string
+}
+
+// validate test case
+func (tc *ATestCase) Validate() {
+	tc.Input = strings.TrimSpace(tc.Input)
+	tc.Output = strings.TrimSpace(tc.Output)
+}
+
 func TestYYYY(t *testing.T) {
-	tests := []struct{ Input, Output string }{
-		{Input: `
+	// var rawInput string = `
+	// `
+
+	// var rawOutput string = `
+	// `
+	tests := []ATestCase{
+		ATestCase{Input: `
 		`, Output: `
 		`},
-		{Input: `
+		ATestCase{Input: `
 		`, Output: `
 		`},
-		{Input: `
+		ATestCase{Input: `
 		`, Output: `
 		`},
 	}
 
 	for i, tt := range tests {
-		t.Run(fmt.Sprint(i), func(t *testing.T) {
+		t.Run(string(i), func(t *testing.T) {
 			mockReader := strings.NewReader(tt.Input)
 			mockWriter := &strings.Builder{}
 
 			// tidy input
-			tt.Input = strings.TrimSpace(tt.Input)
-			tt.Output = strings.TrimSpace(tt.Output)
+			tt.Validate()
 
 			// 빈 문자열
 			if tt.Input == "" {

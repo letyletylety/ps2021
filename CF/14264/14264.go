@@ -1,4 +1,4 @@
-package main
+package CF14264
 
 import (
 	"bufio"
@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func YYYY(_r io.Reader, _w io.Writer) {
+func CF14264(_r io.Reader, _w io.Writer) {
 	in := bufio.NewReader(_r)
 	out := bufio.NewWriter(_w)
 	defer out.Flush()
@@ -25,5 +25,5 @@ func YYYY(_r io.Reader, _w io.Writer) {
 }
 
 // LETYLETYLETY
-func main() { YYYY(os.Stdin, os.Stdout) }
+func main() { CF14264(os.Stdin, os.Stdout) }
 // YTELYTELYTEL

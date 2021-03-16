@@ -1,4 +1,4 @@
-package main
+package CF14264
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestYYYY(t *testing.T) {
+func TestCF14264(t *testing.T) {
 	tests := []struct{ Input, Output string }{
 		{Input: `
 		`, Output: `
@@ -35,7 +35,7 @@ func TestYYYY(t *testing.T) {
 				t.Logf("test case #%d : no input", i)
 			} else {
 				/// run algorithm
-				YYYY(mockReader, mockWriter)
+				CF14264(mockReader, mockWriter)
 				/// get output
 				result := strings.TrimSpace(mockWriter.String())
 

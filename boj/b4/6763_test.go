@@ -8,16 +8,36 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestYYYY(t *testing.T) {
-	tests := []struct{ Input, Output string }{
+// single test case
+type aTestCase struct {
+	Input, Output string
+}
+
+// validate test case
+func (tc *aTestCase) Validate() {
+	tc.Input = strings.TrimSpace(tc.Input)
+	tc.Output = strings.TrimSpace(tc.Output)
+}
+
+func TestBOJ6763(t *testing.T) {
+	tests := []aTestCase{
 		{Input: `
+100
+131
 		`, Output: `
+You are speeding and your fine is $500.
 		`},
 		{Input: `
+40
+39
 		`, Output: `
+Congratulations, you are within the speed limit!
 		`},
 		{Input: `
+100
+120
 		`, Output: `
+You are speeding and your fine is $100.
 		`},
 	}
 
@@ -27,15 +47,14 @@ func TestYYYY(t *testing.T) {
 			mockWriter := &strings.Builder{}
 
 			// tidy input
-			tt.Input = strings.TrimSpace(tt.Input)
-			tt.Output = strings.TrimSpace(tt.Output)
+			tt.Validate()
 
 			// 빈 문자열
 			if tt.Input == "" {
 				t.Logf("test case #%d : no input", i)
 			} else {
 				/// run algorithm
-				YYYY(mockReader, mockWriter)
+				BOJ6763(mockReader, mockWriter)
 				/// get output
 				result := strings.TrimSpace(mockWriter.String())
 

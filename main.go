@@ -3,39 +3,117 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 )
 
 func main() {
-	problemName := os.Args[1]
-	fmt.Printf("problemName = %+v\n", problemName)
+	// var problemName string
 
-	fmt.Println("input workingDirectory")
+	// if len(os.Args) != 2 {
+	// 	problemName = ""
+	// } else {
+	// 	problemName = os.Args[1]
+	// 	fmt.Printf("problemName = %+v\n", problemName)
+	// }
+
+	fmt.Println("input workingDirectory (ex. CF, BOJ ...)")
 	var workingDirectory string
 	fmt.Scanf("%s", &workingDirectory)
 	workingDirectory = strings.ToUpper(workingDirectory)
 
-	var functionName string = fmt.Sprintf("%s%s", workingDirectory, problemName)
-
-	fmt.Println("input subDirectory")
 	var subDirectory string
+	fmt.Println("input problemName (ex. 264C, 14264)")
 	fmt.Scanf("%s", &subDirectory)
 
 	fmt.Printf("subDirectory = %+v\n", subDirectory)
 
+	dirPath := fmt.Sprintf("./%s/%s", workingDirectory, subDirectory)
+
+	if _, err := os.Stat(dirPath); err != nil {
+		if os.IsNotExist(err) {
+			os.MkdirAll(dirPath, 0777)
+		}
+	}
+
+	problemName := subDirectory
+	var functionName string = fmt.Sprintf("%s%s", workingDirectory, problemName)
+
+	// problemNumber, err := strconv.Atoi(problemName)
+
+	// tidy
+	Tidy(dirPath)
+	// if problemName == "" {
+	// 	fmt.Println("THIS IS TIDY!")
+	// 	// only tidy!
+	// } else {
+	// publish
 	filePath := fmt.Sprintf("./%s/%s/%s.go", workingDirectory, subDirectory, problemName)
 
 	fmt.Printf("filePath = %+v\n", filePath)
-	publishFile(filePath, "./template", functionName)
+	PublishFile(filePath, "./template", functionName)
 
-	filePath = fmt.Sprintf("./%s/%s/%s_test.go", workingDirectory, subDirectory, problemName)
-	fmt.Printf("filePath = %+v\n", filePath)
-	publishFile(filePath, "./template_test", functionName)
+	testFilePath := fmt.Sprintf("./%s/%s/%s_test.go", workingDirectory, subDirectory, problemName)
+	fmt.Printf("filePath = %+v\n", testFilePath)
+	PublishFile(testFilePath, "./template_test", functionName)
+
+	fmt.Println("command is below!!")
+	fmt.Printf("nv -O %+v %+v\n", filePath, testFilePath)
+	// }
 }
 
-/// YYYY -> file name
-func publishFile(dst, src, problemName string) error {
+/// tidy main
+/// comment redundant main function
+func Tidy(dirPath string) error {
+	dir, err := os.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("TIDY! dirPath = %+v\n", dirPath)
+
+	for _, file := range dir {
+		fileName := file.Name()
+
+		if strings.Contains(fileName, "_test.go") {
+			// test file
+			continue
+		}
+
+		fmt.Printf("fileName = %+v\n", fileName)
+
+		fullPath := fmt.Sprintf("%s/%s", dirPath, fileName)
+
+		in, err := os.Open(fullPath)
+		defer in.Close()
+
+		if err != nil {
+			log.Fatalln("can not open the file")
+			return err
+		}
+		content, _ := io.ReadAll(in)
+		result_content := strings.ReplaceAll(string(content), `// LETYLETYLETY`, "/*")
+		result_content = strings.ReplaceAll(result_content, "// YTELYTELYTEL", "*/")
+		// remove os import for convenient
+		result_content = strings.ReplaceAll(result_content, `"os"`, "")
+		// clear content
+		in.Truncate(0)
+
+		err = ioutil.WriteFile(fullPath, []byte(result_content), 0777)
+		if err != nil {
+			log.Fatalln("can not write the file")
+			return err
+		}
+		fmt.Printf("fullPath = %+v\n /* */", fullPath)
+	}
+	return nil
+}
+
+// YYYY -> file name
+// make source file and test file for [problemName]
+func PublishFile(dst, src, problemName string) error {
 	in, err := os.Open(src)
 	if err != nil {
 		return err
@@ -53,67 +131,12 @@ func publishFile(dst, src, problemName string) error {
 	}
 	defer out.Close()
 
+	// clear then
+	out.Truncate(0)
+	// write
 	out.WriteString(
 		result_str,
 	)
 
 	return nil
 }
-
-// func main() {
-// 	DirectoryName := os.Args[1]
-
-// 	fmt.Printf("firstArg = %+v\n", DirectoryName)
-
-// 	baseOJPath := fmt.Sprintf("boj")
-// 	dirPath := fmt.Sprintf("./boj/%s", DirectoryName)
-// 	filePath := fmt.Sprintf("./boj/%s/main.go", DirectoryName)
-
-// 	// create base directories
-// 	makeDir(baseOJPath)
-// 	makeDir(dirPath)
-
-// 	// create file
-// 	dest, err := os.Create(filePath)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	src, err := os.Open("template")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	/// copy from template
-// 	io.Copy(dest, src)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	/// start repl
-// 	var input string
-// 	for {
-// 		fmt.Scan(&input)
-// 		// fmt.Printf("input = %s\n", input)
-
-// 		if input == "exit" || input == "quit" {
-// 			fmt.Println("exit")
-// 			break
-// 		}
-// 	}
-// }
-
-// func makeDir(pathname string) {
-// 	fmt.Printf("[makeDir] pathname = %+v\n", pathname)
-
-// 	if _, err := os.Stat(pathname); os.IsNotExist(err) {
-// 		err = os.Mkdir(pathname, 0700)
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 	} else {
-// 		fmt.Println("already exist")
-// 	}
-
-// 	fmt.Println("====everything goes well====")
-// 	fmt.Printf("with %+v\n", pathname)
-// }

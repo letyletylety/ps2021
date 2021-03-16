@@ -8,16 +8,42 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestYYYY(t *testing.T) {
+func TestCF704C(t *testing.T) {
 	tests := []struct{ Input, Output string }{
 		{Input: `
+7 3
+abbccbd
+abd
 		`, Output: `
+5
 		`},
 		{Input: `
+5 3
+abbbc
+abc
 		`, Output: `
+3
 		`},
 		{Input: `
+5 2
+aaaaa
+aa
 		`, Output: `
+4
+		`},
+		{Input: `
+5 5
+abcdf
+abcdf
+		`, Output: `
+1
+		`},
+		{Input: `
+2 2
+ab
+ab
+		`, Output: `
+1
 		`},
 	}
 
@@ -35,7 +61,7 @@ func TestYYYY(t *testing.T) {
 				t.Logf("test case #%d : no input", i)
 			} else {
 				/// run algorithm
-				YYYY(mockReader, mockWriter)
+				CF704C(mockReader, mockWriter)
 				/// get output
 				result := strings.TrimSpace(mockWriter.String())
 
