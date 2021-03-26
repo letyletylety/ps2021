@@ -10,14 +10,12 @@ import (
 )
 
 func main() {
-	// var problemName string
+	programExt := "go"
 
-	// if len(os.Args) != 2 {
-	// 	problemName = ""
-	// } else {
-	// 	problemName = os.Args[1]
-	// 	fmt.Printf("problemName = %+v\n", problemName)
-	// }
+	if len(os.Args) == 2 && os.Args[1] == "d" {
+		programExt = "dart"
+		fmt.Println("DART!")
+	}
 
 	fmt.Println("input workingDirectory (ex. CF, BOJ ...)")
 	var workingDirectory string
@@ -50,18 +48,33 @@ func main() {
 	// 	// only tidy!
 	// } else {
 	// publish
-	filePath := fmt.Sprintf("./%s/%s/%s.go", workingDirectory, subDirectory, problemName)
+	filePath := fmt.Sprintf("./%s/%s/%s.%s", workingDirectory, subDirectory, problemName, programExt)
 
 	fmt.Printf("filePath = %+v\n", filePath)
-	PublishFile(filePath, "./template", functionName)
 
-	testFilePath := fmt.Sprintf("./%s/%s/%s_test.go", workingDirectory, subDirectory, problemName)
+	if programExt == "dart" {
+		PublishFile(filePath, "./dart_template", functionName)
+	} else if programExt == "go" {
+		PublishFile(filePath, "./template", functionName)
+	}
+
+	testFilePath := fmt.Sprintf("./%s/%s/%s_test.%s", workingDirectory, subDirectory, problemName, programExt)
 	fmt.Printf("filePath = %+v\n", testFilePath)
-	PublishFile(testFilePath, "./template_test", functionName)
+
+	switch programExt {
+	case "go":
+		PublishFile(testFilePath, "./template_test", functionName)
+		break
+
+	case "dart":
+		PublishFile(testFilePath, "./dart_template_test", functionName)
+		break
+	}
 
 	fmt.Println("command is below!!")
+	fmt.Printf("cd ./%+v/%+v\n", workingDirectory, subDirectory)
 	fmt.Printf("nv -O %+v %+v\n", filePath, testFilePath)
-	// }
+
 }
 
 /// tidy main
