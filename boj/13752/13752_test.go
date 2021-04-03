@@ -8,25 +8,36 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBOJ16479(t *testing.T) {
+func TestBOJ13752(t *testing.T) {
 	tests := []struct{ Input, Output string }{
 		{Input: `
-14
-12 12
+5
+1
+3
+4
+6
+2
 		`, Output: `
-196
+=
+===
+====
+======
+==
 		`},
 		{Input: `
-8
-9 3
+4
+10
+30
+25
+16
 		`, Output: `
-55
+==========
+==============================
+=========================
+================
 		`},
 		{Input: `
-15
-13 6
 		`, Output: `
-		212.75
 		`},
 	}
 
@@ -44,7 +55,7 @@ func TestBOJ16479(t *testing.T) {
 				t.Logf("test case #%d : no input", i)
 			} else {
 				/// run algorithm
-				BOJ16479(mockReader, mockWriter)
+				BOJ13752(mockReader, mockWriter)
 				/// get output
 				result := strings.TrimSpace(mockWriter.String())
 

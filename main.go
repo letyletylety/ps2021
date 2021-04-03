@@ -12,9 +12,14 @@ import (
 func main() {
 	programExt := "go"
 
-	if len(os.Args) == 2 && os.Args[1] == "d" {
-		programExt = "dart"
-		fmt.Println("DART!")
+	if len(os.Args) == 2 {
+		if os.Args[1] == "d" {
+			programExt = "dart"
+			fmt.Println("DART!")
+		} else if os.Args[1] == "s" {
+			programExt = "swift"
+			fmt.Println("SWIFT!")
+		}
 	}
 
 	fmt.Println("input workingDirectory (ex. CF, BOJ ...)")
@@ -30,6 +35,21 @@ func main() {
 
 	dirPath := fmt.Sprintf("./%s/%s", workingDirectory, subDirectory)
 
+	/// swift!
+	if programExt == "swift" {
+		// 사전에 디렉토리를 생성해야함
+		swiftPath := fmt.Sprintf("./%s/%s.swift", "swift", subDirectory)
+		out, err := os.Create(swiftPath)
+		if err != nil {
+			panic(err)
+		}
+		defer out.Close()
+		fmt.Println("command is below!!")
+		fmt.Printf("cd ./swift\n")
+		fmt.Printf("nv -O %+v\n", swiftPath)
+		return
+	}
+
 	if _, err := os.Stat(dirPath); err != nil {
 		if os.IsNotExist(err) {
 			os.MkdirAll(dirPath, 0777)
@@ -39,14 +59,8 @@ func main() {
 	problemName := subDirectory
 	var functionName string = fmt.Sprintf("%s%s", workingDirectory, problemName)
 
-	// problemNumber, err := strconv.Atoi(problemName)
-
 	// tidy
 	Tidy(dirPath)
-	// if problemName == "" {
-	// 	fmt.Println("THIS IS TIDY!")
-	// 	// only tidy!
-	// } else {
 	// publish
 	filePath := fmt.Sprintf("./%s/%s/%s.%s", workingDirectory, subDirectory, problemName, programExt)
 

@@ -9,20 +9,28 @@ import (
 	"strings"
 )
 
-func BOJ16479(_r io.Reader, _w io.Writer) {
+func BOJ8678(_r io.Reader, _w io.Writer) {
 	in := bufio.NewReader(_r)
 	out := bufio.NewWriter(_w)
 	defer out.Flush()
 
 	// single test case
-	var k, d1, d2 float64
-	Fscan(in, &k, &d1, &d2)
 
-	d1 -= d2
-	d1 /= 2
-	ans := k*k - d1*d1
+	var tt int
+	var a, b int
+	Fscan(in, &tt)
 
-	Fprint(out, ans)
+	for tt > 0 {
+		tt--
+		Fscan(in, &a, &b)
+
+		if b%a == 0 {
+			Fprint(out, "TAK", "\n")
+		} else {
+			Fprint(out, "NIE", "\n")
+		}
+	}
+
 	// 입력 에러 방지
 	_leftData, _ := ioutil.ReadAll(in)
 	if _s := strings.TrimSpace(string(_leftData)); _s != "" {
@@ -31,6 +39,6 @@ func BOJ16479(_r io.Reader, _w io.Writer) {
 }
 
 // LETYLETYLETY
-func main() { BOJ16479(os.Stdin, os.Stdout) }
+func main() { BOJ8678(os.Stdin, os.Stdout) }
 
 // YTELYTELYTEL
